@@ -1,6 +1,9 @@
 name: CI-Pipeline
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build-and-test:
@@ -18,3 +21,4 @@ jobs:
       - name: Run Tests
         run: |
           docker run -e CI=true ahmadissa/docker-react npm run test
+          
