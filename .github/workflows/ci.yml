@@ -21,4 +21,26 @@ jobs:
       - name: Run Tests
         run: |
           docker run -e CI=true ahmadissa/docker-react npm run test
-          
+
+  deploy:
+    name: Deploy to Elastic Beanstalk
+    runs-on: ubuntu-latest
+    needs: build-and-test  
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate Deployment Package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: frontend
+          environment_name: Frontend-env
+          existing_bucket_name: elasticbeanstalk-us-east-1-619071318989
+          region: us-east-1
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
