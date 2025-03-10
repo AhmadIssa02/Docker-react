@@ -1,4 +1,4 @@
-FROM node:16-alpine as builder 
+FROM node:16-alpine AS builder 
 
 WORKDIR "/app"
 COPY package.json .
@@ -10,3 +10,9 @@ RUN npm run build
 
 FROM nginx 
 COPY --from=builder /app/build /usr/share/nginx/html
+
+
+EXPOSE 80
+
+# Ensure the container runs with Nginx
+CMD ["nginx", "-g", "daemon off;"]
