@@ -9,10 +9,10 @@ RUN npm run build
 
 
 FROM nginx 
-COPY --from=builder /app/build /usr/share/nginx/html
-
 
 EXPOSE 80
 
+COPY --from=builder /app/build /usr/share/nginx/html
+
 # Ensure the container runs with Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
